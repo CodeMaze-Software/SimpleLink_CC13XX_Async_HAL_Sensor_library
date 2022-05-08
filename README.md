@@ -99,8 +99,7 @@ The driver can support any user library thanks to the files sensor_api_user_defi
 ```
 sensorUserApiStatus_t sensorApi_UserLibrary_Init(uint8_t deviceI2cAddress)
 {
-    return lis2dtw12Init();
-    //return as6212Init();
+
 }
 
 sensorUserApiStatus_t sensorApi_UserLibrary_Read(uint8_t deviceI2cAddress)
