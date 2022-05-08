@@ -94,7 +94,32 @@ The software was tested on the LIS3DH accelerometer in I2C mode and the AS6212 t
 
 Sensor library replacement
 
-The driver can support any user library thanks to the files sensor_api_user_defines.c and sensor_api_user_defines.h. The predefined functions should contain references to your own sensor library. The sensor library should register the I2C callback (or other, e.g. SPI in asynchronous mode) and refer to the api function:
+The driver can support any user library thanks to the files sensor_api_user_defines.c and sensor_api_user_defines.h. The predefined functions should contain references to your own sensor library.
+ 
+```
+sensorUserApiStatus_t sensorApi_UserLibrary_Init(uint8_t deviceI2cAddress)
+{
+    return lis2dtw12Init();
+    //return as6212Init();
+}
+
+sensorUserApiStatus_t sensorApi_UserLibrary_Read(uint8_t deviceI2cAddress)
+{
+	
+}
+
+sensorUserApiStatus_t sensorApi_UserLibrary_Write(uint8_t deviceI2cAddress)
+{
+   
+}
+
+sensorUserApiStatus_t sensorApi_UserLibrary_Sleep(uint8_t deviceI2cAddress, bool status)
+{
+
+}
+```
+
+The sensor library should register the I2C callback (or other, e.g. SPI in asynchronous mode) and refer to the api function:
 ```
 sensorApi_onResult (result);
 ```
