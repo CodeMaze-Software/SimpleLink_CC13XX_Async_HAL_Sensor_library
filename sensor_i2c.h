@@ -23,7 +23,7 @@
 #include <stddef.h>
 #include <ti/drivers/I2C.h>
 
-typedef int sensorI2cStatus_t;
+typedef int sensorSpiStatus_t;
 
 enum
 {
@@ -35,21 +35,21 @@ enum
     I2C_NOT_INITIALIZED, I2C_INITIALIZED_OK
 };
 
-sensorI2cStatus_t
+sensorSpiStatus_t
 sensorI2cAsyncInit(void (*i2cTransactionCallback)(I2C_Handle handle, I2C_Transaction *transaction,
         bool transferStatus));
 
-sensorI2cStatus_t
+sensorSpiStatus_t
 sensorI2cAsyncGetInitStatus();
 
-sensorI2cStatus_t
+sensorSpiStatus_t
 sensorI2cAsyncWriteData(uint8_t addr, uint8_t *dataTxBuffer, uint8_t txCnt);
 
-sensorI2cStatus_t
+sensorSpiStatus_t
 sensorI2cAsyncReadData(uint8_t addr, uint8_t cmd, uint8_t *dataRxBuffer,
                   uint8_t rxCnt);
 
-sensorI2cStatus_t
+sensorSpiStatus_t
 sensorI2cAsyncTransferData(uint8_t addr, uint8_t *dataTxBuffer, uint8_t txCnt,
                       uint8_t *dataRxBuffer, uint8_t rxCnt);
 

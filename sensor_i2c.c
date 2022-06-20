@@ -19,13 +19,13 @@
 #include "sensor_i2c.h"
 #include <Board.h>
 
-sensorI2cStatus_t initialized;
+sensorSpiStatus_t initialized;
 
-I2C_Handle i2c;
-I2C_Params i2cParams;
-I2C_Transaction i2cTransaction;
+I2C_Handle spi;
+I2C_Params spiParams;
+I2C_Transaction spiTransaction;
 
-sensorI2cStatus_t sensorI2cAsyncInit(
+sensorSpiStatus_t sensorI2cAsyncInit(
         void (*i2cTransactionCallback)(I2C_Handle handle,
                                        I2C_Transaction *transaction,
                                        bool transferStatus))
@@ -36,14 +36,14 @@ sensorI2cStatus_t sensorI2cAsyncInit(
         return I2C_ERR;
 
     I2C_init();
-    I2C_Params_init(&i2cParams);
+    I2C_Params_init(&spiParams);
 
-    i2cParams.bitRate = I2C_400kHz;
-    i2cParams.transferMode = I2C_MODE_CALLBACK;
-    i2cParams.transferCallbackFxn = i2cTransactionCallback;
+    spiParams.bitRate = I2C_400kHz;
+    spiParams.transferMode = I2C_MODE_CALLBACK;
+    spiParams.transferCallbackFxn = i2cTransactionCallback;
 
-    i2c = I2C_open(CC1310_LAUNCHXL_I2C0, &i2cParams);
-    if (i2c == NULL)
+    spi = I2C_open(CC1310_LAUNCHXL_I2C0, &spiParams);
+    if (spi == NULL)
     {
         return I2C_ERR;
     }
@@ -52,36 +52,36 @@ sensorI2cStatus_t sensorI2cAsyncInit(
     return I2C_OK;
 }
 
-sensorI2cStatus_t sensorI2cAsyncGetInitStatus()
+sensorSpiStatus_t sensorI2cAsyncGetInitStatus()
 {
     return initialized;
 }
 
-sensorI2cStatus_t sensorI2cAsyncWriteData(uint8_t addr, uint8_t *dataTxBuffer,
+sensorSpiStatus_t sensorI2cAsyncWriteData(uint8_t addr, uint8_t *dataTxBuffer,
                                           uint8_t txCnt)
 {
     return sensorI2cAsyncTransferData(addr, dataTxBuffer, txCnt, NULL, 0);
 }
 
-sensorI2cStatus_t sensorI2cAsyncReadData(uint8_t addr, uint8_t cmd,
+sensorSpiStatus_t sensorI2cAsyncReadData(uint8_t addr, uint8_t cmd,
                                          uint8_t *dataRxBuffer, uint8_t rxCnt)
 {
     return sensorI2cAsyncTransferData(addr, &cmd, 1, dataRxBuffer, rxCnt);
 }
 
-sensorI2cStatus_t sensorI2cAsyncTransferData(uint8_t addr,
+sensorSpiStatus_t sensorI2cAsyncTransferData(uint8_t addr,
                                              uint8_t *dataTxBuffer,
                                              uint8_t txCnt,
                                              uint8_t *dataRxBuffer,
                                              uint8_t rxCnt)
 {
-    i2cTransaction.writeBuf = dataTxBuffer;
-    i2cTransaction.writeCount = txCnt;
-    i2cTransaction.readBuf = dataRxBuffer;
-    i2cTransaction.readCount = rxCnt;
+    spiTransaction.writeBuf = dataTxBuffer;
+    spiTransaction.writeCount = txCnt;
+    spiTransaction.readBuf = dataRxBuffer;
+    spiTransaction.readCount = rxCnt;
 
-    i2cTransaction.slaveAddress = addr;
-    if (!I2C_transfer(i2c, &i2cTransaction))
+    spiTransaction.slaveAddress = addr;
+    if (!I2C_transfer(spi, &spiTransaction))
     {
         return I2C_ERR;
     }
